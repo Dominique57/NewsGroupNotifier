@@ -1,7 +1,8 @@
 from . import Dispatcher
+from .tools import *
 
 
-new_paths = ['help', 'subscribe']
+new_paths = ['subscribe']
 help_message = 'Here are available commands:\n -' + '\n -'.join(new_paths)
 
 
@@ -20,11 +21,42 @@ def func_home(user, user_input):
     else:
         user.send_message(help_message)
 
+def pre_func_subscribe(user):
+    user.send_message('You just launched the server subscribe activity!')
+    user.change_state('subscribe_server')
+
+def func_subscribe(user, user_input):
+    pass
+
+def enter_func_subscribe_server(user):
+    user.send_message('Please input the address of the wanted server:')
+
+def func_subscribe_server(user, user_input):
+    if is_ntp_addres_valid(user_input):
+        user.store_argument('server_address', user_input)
+        user.change_state('subscribe_channel')
+    else:
+        user.send_message('The address is invalid!')
+
+def enter_func_subscribe_channel(user):
+    user.send_message('Please input the address of the wanted channel:')
+
+def func_subscribe_channel(user, user_input):
+    server_address = user.get_argument('server_address')
+    if is_ntp_channel_valid(server_address, user_input):
+        user.send_message('Your subscription has been accepted!')
+        user.change_state('home')
+    else:
+        user.send_message('The address is invalid!')
+
 
 dispatcher_config = {
     'actions': {
         'welcome': Dispatcher.DEFAULT,
         'home': Dispatcher.DEFAULT,
+        'subscribe': Dispatcher.DEFAULT,
+        'subscribe_server': Dispatcher.DEFAULT,
+        'subscribe_channel': Dispatcher.DEFAULT,
     }
 }
 dispatcher_env = globals()
