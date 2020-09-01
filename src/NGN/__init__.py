@@ -1,3 +1,4 @@
+import nntplib
 from flask import Flask, request
 from chatbotmaker import Bot, Dispatcher, Database
 from chatbotmaker.defaults.facebook import FacebookMessenger, facebook_route
