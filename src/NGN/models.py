@@ -19,7 +19,8 @@ class Channel(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     # USER (Many to Many)
-    users = relationship('User', secondary=user_channel_association)
+    users = relationship('User', secondary=user_channel_association,
+                         lazy='dynamic')
     # SERVER (Channel - Many to One - Server)
     server_id = Column(Integer, ForeignKey('servers.id'))
     server = relationship('Server', uselist=False, back_populates='channels')
@@ -33,14 +34,15 @@ class Server(Base):
     __tablename__ = 'servers'
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    channels = relationship('Channel', back_populates='server')
+    channels = relationship('Channel', back_populates='server', lazy='dynamic')
 
     def __init__(self, name):
         self.name = name
 
 
 database = Database({'sqlalchemy.url': 'sqlite:///foo.db'}, base=Base)
-user_rs = relationship('Channel', secondary=user_channel_association)
+user_rs = relationship('Channel', secondary=user_channel_association,
+                       lazy='dynamic')
 add_relationship(database.user_class, 'channels', user_rs)
 
 session = database.session_maker()

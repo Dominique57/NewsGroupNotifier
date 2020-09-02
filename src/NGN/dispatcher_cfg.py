@@ -19,7 +19,7 @@ def pre_func_home(user):
 def func_home(user, user_input):
     user_input = user_input.lower()
     if user_input in new_paths:
-        user.change_state(user_input)
+        user.change_state(new_paths[user_input])
     else:
         user.send_message(help_message)
 
@@ -39,6 +39,7 @@ def enter_func_subscribe_channel(user):
 def func_subscribe_channel(user, user_input):
     server_address = user.get_argument('server_address')
     if is_ntp_channel_valid(server_address, user_input):
+        add_subscription(server_address, user_input, user)
         user.send_message('Your subscription has been accepted!')
         user.change_state('home')
     else:
