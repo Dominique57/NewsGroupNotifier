@@ -1,8 +1,10 @@
 """ App front-end """
-from . import Flask, request, Bot, bot, facebook_route, FACEBOOK_CHECK_TOKEN
+from . import Flask, request, Bot, facebook_route, FACEBOOK_CHECK_TOKEN
+from . import database, dispatcher, messenger
 
 
 app = Flask(__name__)
+bot = Bot({}, messenger, dispatcher, database)
 
 
 @app.route('/bot', methods=['GET', 'POST'])

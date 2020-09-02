@@ -1,8 +1,10 @@
-from . import Dispatcher
+from . import Dispatcher, Channel, Server
 from .tools import *
 
 
-new_paths = ['subscribe']
+new_paths = {
+    'subscribe': 'subscribe_server',
+}
 help_message = 'Here are available commands:\n -' + '\n -'.join(new_paths)
 
 
@@ -20,13 +22,6 @@ def func_home(user, user_input):
         user.change_state(user_input)
     else:
         user.send_message(help_message)
-
-def pre_func_subscribe(user):
-    user.send_message('You just launched the server subscribe activity!')
-    user.change_state('subscribe_server')
-
-def func_subscribe(user, user_input):
-    pass
 
 def enter_func_subscribe_server(user):
     user.send_message('Please input the address of the wanted server:')
@@ -54,9 +49,8 @@ dispatcher_config = {
     'actions': {
         'welcome': Dispatcher.DEFAULT,
         'home': Dispatcher.DEFAULT,
-        'subscribe': Dispatcher.DEFAULT,
         'subscribe_server': Dispatcher.DEFAULT,
         'subscribe_channel': Dispatcher.DEFAULT,
     }
 }
-dispatcher_env = globals()
+dispatcher = Dispatcher(dispatcher_config, globals())
