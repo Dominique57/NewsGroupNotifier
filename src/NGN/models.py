@@ -42,3 +42,5 @@ class Server(Base):
 database = Database({'sqlalchemy.url': 'sqlite:///foo.db'}, base=Base)
 user_rs = relationship('Channel', secondary=user_channel_association)
 add_relationship(database.user_class, 'channels', user_rs)
+
+session = database.session_maker()
