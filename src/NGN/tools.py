@@ -31,7 +31,6 @@ def add_subscription(server_address, channel_name, user):
         session.add(chan)
 
     if user.channels.filter(database.user_class.id == user.id).scalar() is None:
-        print('Adding...')
         chan.users.append(user)
 
     session.commit()
