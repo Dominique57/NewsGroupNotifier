@@ -1,6 +1,5 @@
-from . import declarative_base, Table, Column, Integer, String, relationship,\
-              ForeignKey
-from . import Database, add_relationship
+from . import declarative_base, Table, Column, Integer, String,\
+              relationship, ForeignKey, Database, add_relationship, nntplib
 
 
 Base = declarative_base()
@@ -18,6 +17,7 @@ class Channel(Base):
     __tablename__ = 'channels'
     id = Column(Integer, primary_key=True)
     name = Column(String)
+    last_article = Column(Integer)
     # USER (Many to Many)
     users = relationship('User', secondary=user_channel_association,
                          lazy='dynamic')
@@ -28,6 +28,9 @@ class Channel(Base):
     def __init__(self, name, server):
         self.name = name
         self.server = server
+        server = nntplib.NNTP(server.name)
+        _, _, _, self.last_article, _ = server.group(name)
+        server.quit()
 
 class Server(Base):
     """ Server class """
